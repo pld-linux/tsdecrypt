@@ -29,6 +29,7 @@ TCP protocol also known as cs378x.
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
+	PREFIX=%{_prefix} \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
