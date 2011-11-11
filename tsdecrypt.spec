@@ -2,7 +2,7 @@
 Summary:	MPEG transport stream decryption
 Name:		tsdecrypt
 Version:	3.0
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Applications/Networking
 Source0:	http://georgi.unixsol.org/programs/tsdecrypt/%{name}-%{version}.tar.bz2
@@ -30,6 +30,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	PREFIX=%{_prefix} \
+	INSTALL_DOC_DIR=%{_mandir}/man1 \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
