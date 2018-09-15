@@ -2,7 +2,7 @@
 Summary:	MPEG transport stream decryption
 Name:		tsdecrypt
 Version:	3.0
-Release:	3
+Release:	4
 License:	GPL v2+
 Group:		Applications/Networking
 Source0:	http://georgi.unixsol.org/programs/tsdecrypt/%{name}-%{version}.tar.bz2
