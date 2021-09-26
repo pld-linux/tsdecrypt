@@ -1,0 +1,86 @@
+--- tsdecrypt-3.0/libfuncs/Makefile~	2011-09-15 15:57:44.000000000 +0200
++++ tsdecrypt-3.0/libfuncs/Makefile	2021-09-26 15:45:44.094156123 +0200
+@@ -1,9 +1,8 @@
+ CC = $(CROSS)$(TARGET)gcc
+ LINK = $(CROSS)$(TARGET)ld -o
+ LIBRARY_LINK_OPTS =  -L. -r
+-CFLAGS = -ggdb -Wall -Wextra -Wshadow -Wformat-security -O2
++CFLAGS = -ggdb -Wall -Wextra -Wshadow -Wformat-security -O2 $(OPTFLAGS)
+ RM = /bin/rm -f
+-Q=@
+ 
+ OBJS = queue.o list.o cbuf.o io.o log.o http_response.o asyncdns.o server.o misc.o
+ PROG = libfuncs.a
+--- tsdecrypt-3.0/libtsfuncs/Makefile~	2011-09-15 13:20:24.000000000 +0200
++++ tsdecrypt-3.0/libtsfuncs/Makefile	2021-09-26 15:46:08.340878316 +0200
+@@ -1,9 +1,8 @@
+ CC = $(CROSS)$(TARGET)gcc
+ LINK = $(CROSS)$(TARGET)ld -o
+ LIBRARY_LINK_OPTS =  -L. -r
+-CFLAGS = -ggdb -D_GNU_SOURCE -Wall -Wextra -Wshadow -Wformat-security -O2
++CFLAGS = -ggdb -D_GNU_SOURCE -Wall -Wextra -Wshadow -Wformat-security -O2 $(OPTFLAGS)
+ RM = /bin/rm -f
+-Q=@
+ 
+ OBJS = log.o tsfuncs.o crc.o misc.o time.o \
+ 	sections.o secdata.o \
+--- tsdecrypt-3.0/Makefile~	2011-09-30 12:40:01.000000000 +0200
++++ tsdecrypt-3.0/Makefile	2021-09-26 15:46:39.150948964 +0200
+@@ -1,9 +1,8 @@
+ CC = $(CROSS)$(TARGET)gcc
+-STRIP = $(CROSS)$(TARGET)strip
+ BUILD_ID = $(shell date +%F_%R)
+ VERSION="v3.0"
+ GIT_VER = $(shell git describe --tags --dirty --always 2>/dev/null)
+-CFLAGS = -ggdb -Wall -Wextra -Wshadow -Wformat-security -Wno-strict-aliasing -O2 -D_GNU_SOURCE -DBUILD_ID=\"$(BUILD_ID)\"
++CFLAGS = -ggdb -Wall -Wextra -Wshadow -Wformat-security -Wno-strict-aliasing -O2 -D_GNU_SOURCE -DBUILD_ID=\"$(BUILD_ID)\" $(OPTFLAGS)
+ ifneq "$(GIT_VER)" ""
+ CFLAGS += -DGIT_VER=\"$(GIT_VER)\"
+ else
+@@ -11,7 +11,6 @@
+ endif
+ 
+ RM = /bin/rm -f
+-Q = @
+ 
+ PREFIX ?= /usr/local
+ 
+@@ -39,11 +39,11 @@
+ 
+ $(FUNCS_LIB):
+ 	$(Q)echo "  MAKE	$(FUNCS_LIB)"
+-	$(Q)$(MAKE) -s -C $(FUNCS_DIR)
++	$(Q)$(MAKE) -C $(FUNCS_DIR)
+ 
+ $(TS_LIB):
+ 	$(Q)echo "  MAKE	$(TS_LIB)"
+-	$(Q)$(MAKE) -s -C $(TS_DIR)
++	$(Q)$(MAKE) -C $(TS_DIR)
+ 
+ tsdecrypt: $(tsdecrypt_OBJS)
+ 	$(Q)echo "  LINK	tsdecrypt"
+@@ -53,10 +52,6 @@
+ 	$(Q)echo "  CC	tsdecrypt	$<"
+ 	$(Q)$(CC) $(CFLAGS)  -c $<
+ 
+-strip:
+-	$(Q)echo "  STRIP	$(PROGS)"
+-	$(Q)$(STRIP) $(PROGS)
+-
+ clean:
+ 	$(Q)echo "  RM	$(CLEAN_OBJS)"
+ 	$(Q)$(RM) $(CLEAN_OBJS)
+@@ -62,10 +62,10 @@
+ 	$(Q)$(RM) $(CLEAN_OBJS)
+ 
+ distclean: clean
+-	$(Q)$(MAKE) -s -C $(TS_DIR) clean
+-	$(Q)$(MAKE) -s -C $(FUNCS_DIR) clean
++	$(Q)$(MAKE) -C $(TS_DIR) clean
++	$(Q)$(MAKE) -C $(FUNCS_DIR) clean
+ 
+-install: all strip
++install: all
+ 	@install -d "$(INSTALL_PRG_DIR)"
+ 	@install -d "$(INSTALL_DOC_DIR)"
+ 	@echo "INSTALL $(INSTALL_PRG) -> $(INSTALL_PRG_DIR)"
