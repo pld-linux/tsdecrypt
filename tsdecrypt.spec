@@ -1,4 +1,5 @@
 Summary:	MPEG transport stream decryption
+Summary(pl.UTF-8):	Odszyfrowywanie strumienia transportowego MPEG
 Name:		tsdecrypt
 Version:	10.0
 Release:	1
@@ -13,10 +14,16 @@ BuildRequires:	openssl-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-tsdecrypt reads incoming mpeg transport stream over UDP/RTP and then
+tsdecrypt reads incoming MPEG transport stream over UDP/RTP and then
 decrypts it using libdvbcsa and keys obtained from OSCAM or similar
 CAM server. tsdecrypt communicates with CAM server using camd35 over
 TCP protocol also known as cs378x.
+
+%description -l pl.UTF-8
+tsdecrypt czyta przychodzący strumień transportowy MPEG po UDP/RTP, a
+następnie odszyfrowuje go z użyciem libdvbcsa i kluczy uzyskanych z
+OSCAM lub podobnego CAM. Komunikuje się z serwerem CAM przy użyciu
+protokołu cam36 po TCP, znanego także jako cs378x.
 
 %prep
 %setup -q
