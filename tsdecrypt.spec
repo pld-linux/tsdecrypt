@@ -1,13 +1,13 @@
 Summary:	MPEG transport stream decryption
 Name:		tsdecrypt
-Version:	3.0
-Release:	6
+Version:	10.0
+Release:	1
 License:	GPL v2+
 Group:		Applications/Networking
-Source0:	http://georgi.unixsol.org/programs/tsdecrypt/%{name}-%{version}.tar.bz2
-# Source0-md5:	2a04c257306fc769ce0131391af69766
+Source0:	https://georgi.unixsol.org/programs/tsdecrypt/%{name}-%{version}.tar.bz2
+# Source0-md5:	a90391fce090e3e8075cd1f2dce1061b
 Patch0:		make.patch
-URL:		http://georgi.unixsol.org/programs/tsdecrypt/
+URL:		https://georgi.unixsol.org/programs/tsdecrypt/
 BuildRequires:	libdvbcsa-devel
 BuildRequires:	openssl-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -24,7 +24,8 @@ TCP protocol also known as cs378x.
 
 %build
 %{__make} \
-	OPTFLAGS="%{rpmcflags}"
+	OPTFLAGS="%{rpmcflags}" \
+	Q=
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -40,5 +41,5 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc ChangeLog README TODO
-%attr(755,root,root) %{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
+%attr(755,root,root) %{_bindir}/tsdecrypt
+%{_mandir}/man1/tsdecrypt.1*

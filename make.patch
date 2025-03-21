@@ -1,76 +1,76 @@
---- tsdecrypt-3.0/libfuncs/Makefile~	2011-09-15 15:57:44.000000000 +0200
-+++ tsdecrypt-3.0/libfuncs/Makefile	2021-09-26 15:45:44.094156123 +0200
-@@ -1,9 +1,8 @@
- CC = $(CROSS)$(TARGET)gcc
- LINK = $(CROSS)$(TARGET)ld -o
- LIBRARY_LINK_OPTS =  -L. -r
--CFLAGS = -ggdb -Wall -Wextra -Wshadow -Wformat-security -O2
-+CFLAGS = -ggdb -Wall -Wextra -Wshadow -Wformat-security -O2 $(OPTFLAGS)
- RM = /bin/rm -f
--Q=@
+--- tsdecrypt-10.0/libfuncs/Makefile.orig	2025-03-21 19:11:58.346415774 +0100
++++ tsdecrypt-10.0/libfuncs/Makefile	2025-03-21 19:12:37.972867766 +0100
+@@ -3,7 +3,7 @@ LINK = $(CROSS)$(TARGET)ld -o
+ MKDEP = $(CC) -M -o $*.d $<
  
- OBJS = queue.o list.o cbuf.o io.o log.o http_response.o asyncdns.o server.o misc.o
- PROG = libfuncs.a
---- tsdecrypt-3.0/libtsfuncs/Makefile~	2011-09-15 13:20:24.000000000 +0200
-+++ tsdecrypt-3.0/libtsfuncs/Makefile	2021-09-26 15:46:08.340878316 +0200
-@@ -1,9 +1,8 @@
- CC = $(CROSS)$(TARGET)gcc
- LINK = $(CROSS)$(TARGET)ld -o
  LIBRARY_LINK_OPTS =  -L. -r
--CFLAGS = -ggdb -D_GNU_SOURCE -Wall -Wextra -Wshadow -Wformat-security -O2
-+CFLAGS = -ggdb -D_GNU_SOURCE -Wall -Wextra -Wshadow -Wformat-security -O2 $(OPTFLAGS)
+-CFLAGS = -O2 -ggdb -std=c99 -D_GNU_SOURCE
++CFLAGS = $(OPTFLAGS) -std=c99 -D_GNU_SOURCE
+ CFLAGS += -Wall -Wextra -Wshadow -Wformat-security -Wstrict-prototypes
  RM = /bin/rm -f
--Q=@
+ Q=@
+--- tsdecrypt-10.0/libtsfuncs/Makefile.orig	2025-03-21 19:11:58.346415774 +0100
++++ tsdecrypt-10.0/libtsfuncs/Makefile	2025-03-21 19:13:04.889388613 +0100
+@@ -3,7 +3,7 @@ LINK = $(CROSS)$(TARGET)ld -o
+ MKDEP = $(CC) -M -o $*.d $<
  
- OBJS = log.o tsfuncs.o crc.o misc.o time.o \
- 	sections.o secdata.o \
---- tsdecrypt-3.0/Makefile~	2011-09-30 12:40:01.000000000 +0200
-+++ tsdecrypt-3.0/Makefile	2021-09-26 15:46:39.150948964 +0200
-@@ -1,9 +1,8 @@
- CC = $(CROSS)$(TARGET)gcc
--STRIP = $(CROSS)$(TARGET)strip
- BUILD_ID = $(shell date +%F_%R)
- VERSION="v3.0"
- GIT_VER = $(shell git describe --tags --dirty --always 2>/dev/null)
--CFLAGS = -ggdb -Wall -Wextra -Wshadow -Wformat-security -Wno-strict-aliasing -O2 -D_GNU_SOURCE -DBUILD_ID=\"$(BUILD_ID)\"
-+CFLAGS = -ggdb -Wall -Wextra -Wshadow -Wformat-security -Wno-strict-aliasing -O2 -D_GNU_SOURCE -DBUILD_ID=\"$(BUILD_ID)\" $(OPTFLAGS)
- ifneq "$(GIT_VER)" ""
- CFLAGS += -DGIT_VER=\"$(GIT_VER)\"
- else
-@@ -11,7 +11,6 @@
+ LIBRARY_LINK_OPTS =  -L. -r
+-CFLAGS = -O2 -ggdb -std=c99 -D_GNU_SOURCE
++CFLAGS = $(OPTFLAGS) -std=c99 -D_GNU_SOURCE
+ CFLAGS += -Wall -Wextra -Wshadow -Wformat-security -Wstrict-prototypes
+ RM = /bin/rm -f
+ Q=@
+--- tsdecrypt-10.0/Makefile.orig	2025-03-21 19:11:58.349749090 +0100
++++ tsdecrypt-10.0/Makefile	2025-03-21 19:14:09.459038810 +0100
+@@ -15,7 +15,7 @@ ifndef V
+ Q = @
  endif
  
- RM = /bin/rm -f
--Q = @
+-CFLAGS ?= -O2 -ggdb \
++CFLAGS ?= $(OPTFLAGS) \
+  -W -Wall -Wextra \
+  -Wshadow -Wformat-security -Wstrict-prototypes
  
- PREFIX ?= /usr/local
+@@ -81,24 +81,24 @@ ffdecsa: clean
+ 	$(Q)echo "Switching build to FFdecsa."
+ 	@-if test -e FFdecsa.opts.saved; then $(MV) FFdecsa.opts.saved FFdecsa.opts; fi
+ 	@-if ! test -e FFdecsa.opts; then ./FFdecsa_init "$(CROSS)$(TARGET)" "$(CC)"; fi
+-	$(Q)$(MAKE) -s tsdecrypt
++	$(Q)$(MAKE) tsdecrypt
  
-@@ -39,11 +39,11 @@
+ ffdecsa_force:
+ 	$(Q)$(RM) FFdecsa.opts
+-	$(Q)$(MAKE) -s ffdecsa
++	$(Q)$(MAKE) ffdecsa
  
- $(FUNCS_LIB):
+ dvbcsa: clean
+ 	$(Q)echo "Switching build to libdvbcsa."
+ 	@-if test -f FFdecsa.opts; then $(MV) FFdecsa.opts FFdecsa.opts.saved; fi
+-	$(Q)$(MAKE) -s tsdecrypt
++	$(Q)$(MAKE) tsdecrypt
+ 
+ $(FUNCS_LIB): $(FUNCS_DIR)/libfuncs.h
  	$(Q)echo "  MAKE	$(FUNCS_LIB)"
 -	$(Q)$(MAKE) -s -C $(FUNCS_DIR)
 +	$(Q)$(MAKE) -C $(FUNCS_DIR)
  
- $(TS_LIB):
+ $(TS_LIB): $(TS_DIR)/tsfuncs.h $(TS_DIR)/tsdata.h
  	$(Q)echo "  MAKE	$(TS_LIB)"
 -	$(Q)$(MAKE) -s -C $(TS_DIR)
 +	$(Q)$(MAKE) -C $(TS_DIR)
  
  tsdecrypt: $(tsdecrypt_OBJS)
  	$(Q)echo "  LINK	tsdecrypt"
-@@ -53,10 +52,6 @@
- 	$(Q)echo "  CC	tsdecrypt	$<"
- 	$(Q)$(CC) $(CFLAGS)  -c $<
+@@ -111,7 +111,7 @@ tsdecrypt: $(tsdecrypt_OBJS)
  
--strip:
--	$(Q)echo "  STRIP	$(PROGS)"
--	$(Q)$(STRIP) $(PROGS)
--
- clean:
- 	$(Q)echo "  RM	$(CLEAN_OBJS)"
- 	$(Q)$(RM) $(CLEAN_OBJS)
-@@ -62,10 +62,10 @@
+ FFdecsa/FFdecsa.o:
+ 	$(Q)echo "  MAKE	FFdecsa"
+-	$(Q)$(MAKE) -s -C FFdecsa FLAGS=$(FFDECSA_FLAGS) PARALLEL_MODE=$(FFDECSA_MODE) COMPILER=$(CROSS)$(CC) FFdecsa.o
++	$(Q)$(MAKE) -C FFdecsa FLAGS=$(FFDECSA_FLAGS) PARALLEL_MODE=$(FFDECSA_MODE) COMPILER=$(CROSS)$(CC) FFdecsa.o
+ 
+ -include $(tsdecrypt_SRC:.c=.d)
+ 
+@@ -124,8 +124,8 @@ clean:
  	$(Q)$(RM) $(CLEAN_OBJS)
  
  distclean: clean
@@ -78,9 +78,6 @@
 -	$(Q)$(MAKE) -s -C $(FUNCS_DIR) clean
 +	$(Q)$(MAKE) -C $(TS_DIR) clean
 +	$(Q)$(MAKE) -C $(FUNCS_DIR) clean
+ 	$(Q)$(RM) FFdecsa.opts
  
--install: all strip
-+install: all
- 	@install -d "$(INSTALL_PRG_DIR)"
- 	@install -d "$(INSTALL_DOC_DIR)"
- 	@echo "INSTALL $(INSTALL_PRG) -> $(INSTALL_PRG_DIR)"
+ install: all
