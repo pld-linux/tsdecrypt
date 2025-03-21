@@ -20,7 +20,7 @@ TCP protocol also known as cs378x.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P0 -p1
 
 %build
 %{__make} \
