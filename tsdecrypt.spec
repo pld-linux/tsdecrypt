@@ -8,6 +8,7 @@ Group:		Applications/Networking
 Source0:	https://georgi.unixsol.org/programs/tsdecrypt/%{name}-%{version}.tar.bz2
 # Source0-md5:	a90391fce090e3e8075cd1f2dce1061b
 Patch0:		make.patch
+Patch1:		%{name}-includes.patch
 URL:		https://georgi.unixsol.org/programs/tsdecrypt/
 BuildRequires:	libdvbcsa-devel
 BuildRequires:	openssl-devel
@@ -28,9 +29,11 @@ protokołu cam36 po TCP, znanego także jako cs378x.
 %prep
 %setup -q
 %patch -P0 -p1
+%patch -P1 -p1
 
 %build
 %{__make} \
+	CC="%{__cc}" \
 	OPTFLAGS="%{rpmcflags}" \
 	Q=
 
